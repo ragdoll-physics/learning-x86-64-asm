@@ -1,6 +1,9 @@
         #
         # Given a number, this program computes the factorial.
         #
+        # Limitation: only up to 5! because we're using the result of the factorial as the return value
+        # of our program, which only allows up to 256.
+        #
         .section .data
 
         .section .text
