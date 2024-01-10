@@ -23,7 +23,6 @@ _start:
         mov %rax, %rsi
         xor %eax, %eax
         call printf
-        addq $8, %rsp  # Clean up the stack.
 
         movq $60, %rax  # sys_exit system call.
         xorq %rdi, %rdi # Return with 0 now.
