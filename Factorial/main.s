@@ -1,8 +1,7 @@
         #
         # Given a number, this program computes the factorial.
         #
-        # Limitation: only up to 5! because we're using the result of the factorial as the return value
-        # of our program, which only allows up to 256.
+        # Limitations: up to 12! because I don't know how to handle bigger numbers yet.
         #
         .section .data
 
@@ -14,7 +13,7 @@ format_string:
         .globl _start
 
 _start:
-        pushq $8        # Push the value we want to compute the factorial of.
+        pushq $12       # Push the value we want to compute the factorial of.
         call factorial
         addq $8, %rsp   # Get rid of the parameter we pushed on the stack.
 
