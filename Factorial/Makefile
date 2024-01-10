@@ -1,6 +1,6 @@
 all:
-	as -g --32 main.s -o main.o
-	ld -g -m elf_i386 main.o -o main
+	as -g main.s -o main.o
+	ld -g -dynamic-linker /lib64/ld-linux-x86-64.so.2 -lc main.o -o main
 
 clean:
 	rm main *.o
