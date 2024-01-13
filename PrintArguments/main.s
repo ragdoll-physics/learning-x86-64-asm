@@ -1,19 +1,17 @@
         #
-        # Stack layout for x86-64
+        # I think this is the stack layout but I'm not 100% sure yet.
         #
-        # ----------------------- 32
-        # - rsp + 32 (argv 3)    -
-        # ----------------------- 24
-        # - rsp + 24 (argv 2)    -
-        # ----------------------- 16
-        # - rsp + 16 (argv 1)    -
-        # ----------------------- 8
-        # - rsp + 8 (argv 0)    -
-        # ----------------------- 0
-        # - stack pointer (rsp) -
-        # -----------------------
-        #
-        # argc is in %rdi or %edi
+        # --------------------------------------------- 32
+        # - rsp + 32 (argv 3)                         -
+        # --------------------------------------------- 24
+        # - rsp + 24 (argv 2)                         -
+        # --------------------------------------------- 16
+        # - rsp + 16 (argv 1)                         -
+        # --------------------------------------------- 8
+        # - rsp + 8 (argv 0)                          -
+        # --------------------------------------------- 0
+        # - stack pointer, which contains argc? (rsp) -
+        # ---------------------------------------------
         #
         .text
         .section .rodata
@@ -31,7 +29,13 @@ format_argc:
 
 main:
         leaq    format_argc(%rip), %rdi
-        mov     0(%rsp), %rsi
+        mov     (%rsp), %rsi
+        movl    $0, %eax
+        call    printf
+        movl    $0, %eax
+
+        leaq    format_string(%rip), %rdi
+        mov     8(%rsp), %rsi
         movl    $0, %eax
         call    printf
         movl    $0, %eax
