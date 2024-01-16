@@ -4,3 +4,6 @@ all:
 
 clean:
 	rm main *.o
+
+run:
+	./main lowercase_file.txt test123.txt
