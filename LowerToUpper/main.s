@@ -53,10 +53,8 @@ main:
         cmpl    $3, (%rsp)
         jne     err_exit_with_wrong_arguments
 
-        /* Reserve space for two fds. */
         pushq   %rbp
         movq    %rsp, %rbp
-        subq    $16, %rsp
 
         /* Open both files first and check if any error ocurred. */
         movq    $sys_open, %rax
@@ -67,6 +65,9 @@ main:
 
         cmpq    $0, %rax
         jle     err_couldnt_open_input_file
+
+        /* Reserve space for input fd. */
+        subq    $8, %rsp
 
         /* Save fd. */
         movq    %rax, -8(%rbp)
@@ -81,6 +82,9 @@ main:
         cmpq    $0, %rax
         jle     err_couldnt_open_output_file
 
+        /* Reserve space for output fd. */
+        subq    $8, %rsp
+
         movq    %rax, -16(%rbp)
 
 read_loop:
@@ -93,7 +97,7 @@ read_loop:
         cmpq    $0, %rax
         jle     end_loop
 
-        pushq   $buffer_data /* @TODO Why are we pushing the buffer's address when we already have it? */
+        pushq   $buffer_data
         pushq   %rax /* Size of the buffer. */
         call    convert_to_upper
         popq    %rax
@@ -135,16 +139,9 @@ err_exit_with_wrong_arguments:
         jmp     exit
 
 err_couldnt_open_input_file:
+        popq    %rbp
         leaq    string_fmt(%rip), %rdi
         mov     $str_err_couldnt_open_input_file, %rsi
-        movl    $0, %eax
-        call    printf
-        movl    $0, %eax
-        jmp     exit
-
-err_couldnt_open_output_file:
-        leaq    string_fmt(%rip), %rdi
-        mov     $str_err_couldnt_open_output_file, %rsi
         movl    $0, %eax
         call    printf
         movl    $0, %eax
@@ -159,6 +156,7 @@ err_closing_input_file:
         jmp     exit
 
 err_closing_output_file:
+        popq    %rbp
         leaq    string_fmt(%rip), %rdi
         mov     $str_err_couldnt_close_output_file, %rsi
         movl    $0, %eax
