@@ -1,0 +1,11 @@
+.equ sys_write, 4
+.equ sys_open,  5
+.equ sys_close, 6
+.equ sys_brk,   45
+.equ sys_exit,  1
+.equ sys_read,  3
+.equ stdin,     0
+.equ stdout,    1
+.equ stderr,    2
+.equ eof,       0
+.equ syscall,   0x80
